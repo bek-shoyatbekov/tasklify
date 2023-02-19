@@ -1,0 +1,31 @@
+/** @format */
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  position: relative;
+  margin-top: 2rem;
+  padding-left: 2%;
+}
+
+.input-field input {
+  padding: 0.8rem;
+}
+
+form .input-field:first-child {
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  background: linear-gradient(to left, #2cc0c0, #54a1e9);
+  color: white;
+  border-radius: 4px;
+  margin-top: 2rem;
+  padding: 0.4rem;
+  width: 15rem;
+  padding-right: 3%;
+  padding-left: 2%;
+}

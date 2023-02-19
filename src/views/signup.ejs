@@ -1,0 +1,71 @@
+<!-- @format -->
+<%- include('includes/head.ejs') %>
+
+<!-- @format -->
+<link rel="stylesheet" href="/stylesheets/nav.css" />
+<link rel="stylesheet" href="/stylesheets/signup.css" />
+
+<nav class="navbar">
+  <!-- LOGO -->
+
+  <div class="logo">Tasklify</div>
+
+  <!-- NAVIGATION MENU -->
+
+  <ul class="nav-links">
+    <div class="menu">
+      <li><a href="/">Home</a></li>
+
+      <li><a href="/api/v1/about">About</a></li>
+
+      <li class="services">
+        <a href="/">Services</a>
+
+        <!-- DROPDOWN MENU -->
+
+        <ul class="dropdown">
+          <li><a href="/api/v1/progress">Progress</a></li>
+
+          <li><a href="/api/v1/tasks?deleted=true">Deleted Tasks</a></li>
+        </ul>
+      </li>
+      <% if(!verified) {%>
+
+      <li><a href="/me/api/v1/signup">Sign Up</a></li>
+
+      <li><a href="/me/api/v1/signin">Sign In</a></li>
+      <% } %>
+    </div>
+  </ul>
+</nav>
+
+<form action="/me/api/v1/signup" method="POST">
+  <h2>Sign Up</h2>
+  <div class="input-field">
+    <input
+      type="text"
+      name="name"
+      id="name"
+      placeholder="Enter Username"
+      required />
+  </div>
+  <div class="input-field">
+    <input
+      type="email"
+      name="email"
+      id="email"
+      placeholder="Enter Email"
+      required />
+  </div>
+  <div class="input-field">
+    <input
+      type="password"
+      name="password"
+      id="password"
+      placeholder="Enter Password"
+      required />
+  </div>
+  <button style="padding-left: 2%" class="btn">Sign Up</button>
+</form>
+<div class="msg"></div>
+<%- include('includes/end.ejs') %>

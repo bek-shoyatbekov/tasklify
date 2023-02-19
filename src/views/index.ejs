@@ -1,0 +1,71 @@
+<!-- @format -->
+
+<%- include('includes/head.ejs') %> <%- include('includes/nav.ejs') %>
+<style>
+  .main_ {
+    margin: 0;
+    padding: auto;
+  }
+  label {
+    font-size: 2rem;
+    font-style: italic;
+  }
+  input {
+    font-size: 2rem;
+    border-radius: 1%;
+  }
+  .h {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 2rem;
+  }
+  .submit {
+    background-color: blue;
+    color: aliceblue;
+    width: 10rem;
+    border-radius: 1%;
+  }
+  .fm {
+    padding-top: 10%;
+    margin-bottom: 1%;
+    text-align: center;
+  }
+  li {
+    list-style: none;
+  }
+  .item {
+    margin-bottom: 2%;
+    background-color: rgb(35, 142, 150);
+    padding-bottom: 1rem;
+  }
+  .task_area {
+    padding-bottom: 1%;
+  }
+</style>
+
+<h1 style="padding-left: 1%"><%= title%></h1>
+<main class="main_">
+  <section class="main_section">
+    <form action="/me/api/v1/tasks" class="fm" method="POST">
+      <div class="fm_area">
+        <div class="fm_row">
+          <h1 class="h">Task manager</h1>
+          <input type="text" name="task" id="task" placeholder="Title" />
+          <input class="submit" type="submit" value="Submit" />
+        </div>
+      </div>
+    </form>
+    <% if(verified && task.length>0) {%>
+    <fieldset>
+      <div class="task_area">
+        <ul class="items">
+          <% task.forEach(e=>{ %>
+          <li class="item"><%= e %></li>
+          <% }) %>
+        </ul>
+      </div>
+    </fieldset>
+    <% } %>
+  </section>
+</main>
+
+<%- include('includes/end.ejs') %>
