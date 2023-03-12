@@ -16,7 +16,7 @@
     <div class="menu">
       <li><a href="/">Home</a></li>
 
-      <li><a href="/api/v1/about">About</a></li>
+      <li><a href="/about">About</a></li>
 
       <li class="services">
         <a href="/">Services</a>
@@ -24,22 +24,22 @@
         <!-- DROPDOWN MENU -->
 
         <ul class="dropdown">
-          <li><a href="/api/v1/progress">Progress</a></li>
+          <li><a href="/progress">Progress</a></li>
 
-          <li><a href="/api/v1/tasks?deleted=true">Deleted Tasks</a></li>
+          <li><a href="/tasks?deleted=true">Deleted Tasks</a></li>
         </ul>
       </li>
-      <% if(!verified) {%>
+      <% if(!isAuth) {%>
 
-      <li><a href="/me/api/v1/signup">Sign Up</a></li>
+      <li><a href="/signup">Sign Up</a></li>
 
-      <li><a href="/me/api/v1/signin">Sign In</a></li>
+      <li><a href="/signin">Sign In</a></li>
       <% } %>
     </div>
   </ul>
 </nav>
-
-<form action="/me/api/v1/signup" method="POST">
+<%- include('includes/flash.ejs') %>  
+<form action="/signup" method="POST">
   <h2>Sign Up</h2>
   <div class="input-field">
     <input

@@ -1,0 +1,18 @@
+<!-- @format -->
+
+<style>
+  .message {
+    text-align: center;
+    background-color: cornflowerblue;
+    width: auto;
+    height: auto;
+    border-radius: 1%;
+  }
+</style>
+
+<% if(message) { %>
+<section class="message">
+  <h1><%= message.title %></h1>
+  <p><%= message.info %></p>
+</section>
+<% } %>

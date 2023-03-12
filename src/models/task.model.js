@@ -1,7 +1,7 @@
 const { Schema, model, default: mongoose } = require('mongoose');
 
 const taskSchema = new Schema({
-    owner: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },

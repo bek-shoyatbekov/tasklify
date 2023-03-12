@@ -32,40 +32,92 @@
   li {
     list-style: none;
   }
-  .item {
-    margin-bottom: 2%;
-    background-color: rgb(35, 142, 150);
-    padding-bottom: 1rem;
-  }
+
   .task_area {
     padding-bottom: 1%;
   }
-</style>
+  .select {
+    padding: 0%;
+    width: 5rem;
+    background-color: rgb(47, 0, 255);
+  }
 
-<h1 style="padding-left: 1%"><%= title%></h1>
+  .ex {
+    margin-bottom: 1%;
+    font-size: larger;
+    width: 10rem;
+    background-color: rgb(63, 187, 218);
+  }
+  .inputs {
+    background-color: rgb(55, 168, 131);
+    margin: 0;
+    padding: 0%;
+    text-align: center;
+  }
+  .items {
+    background-size: cover;
+    background-position: 4%;
+  }
+  .btns {
+    margin-left: -30%;
+    margin-top: 1%;
+  }
+</style>
 <main class="main_">
   <section class="main_section">
-    <form action="/me/api/v1/tasks" class="fm" method="POST">
+    <form action="/add" class="fm" method="POST">
       <div class="fm_area">
         <div class="fm_row">
           <h1 class="h">Task manager</h1>
-          <input type="text" name="task" id="task" placeholder="Title" />
-          <input class="submit" type="submit" value="Submit" />
+          <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="Title"
+            required />
+          <select name="status" id="status" class="submit select">
+            <option value="done">Done</option>
+            <option value="doing">Doing</option>
+            <option value="undone">Undone</option>
+          </select>
+          <input class="submit" type="submit" value="Add" />
         </div>
       </div>
     </form>
-    <% if(verified && task.length>0) {%>
-    <fieldset>
+    <% if(tasks.length>0) {%>
+    <fieldset class="inputs">
       <div class="task_area">
         <ul class="items">
-          <% task.forEach(e=>{ %>
-          <li class="item"><%= e %></li>
+          <% tasks.forEach(task=>{ %>
+          <form action="/update/<%=task._id %>" method="POST">
+            <li class="item">
+              <input
+                type="text"
+                name="task"
+                id="task"
+                value="<%= task.title %>" />
+              <input
+                type="text"
+                name="status"
+                id="status"
+                value="<%= task.status %>" />
+            </li>
+            <div class="btns">
+              <button class="ex" type="submit">Update</button>
+            </div>
+          </form>
+          <div class="btns">
+            <a href="/delete/<%=task._id %>"
+              ><button class="ex">Delete</button></a
+            >
+          </div>
           <% }) %>
         </ul>
       </div>
     </fieldset>
-    <% } %>
+    <% }else{%> <% } %>
   </section>
+  <%- include('includes/flash.ejs') %>
 </main>
 
 <%- include('includes/end.ejs') %>

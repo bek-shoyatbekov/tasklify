@@ -6,12 +6,12 @@ const logger = require('morgan');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 
+const flash = require('connect-flash');
+
 require('dotenv').config();
 
 const app = express();
-
-
-
+const User = require('./models/user.model');
 
 // view engine setup
 app.set('views', path.join(__dirname, "views"));
@@ -35,18 +35,27 @@ app.use(sessions({
   resave: false
 }));
 
+app.use(flash())
+
 require('./config/connectDB')();
 
 const userRoute = require('./routes/users');
-const indexRoute = require('./routes/index');
+const taskRoute = require('./routes/task');
 
+app.use((req, res, next) => {
+  if (!req.session.task) {
+    req.session.task = [];
+  }
+  next()
+});
 
-app.use('/', indexRoute);
-app.use('/me', userRoute);
+app.use('/', taskRoute);
+app.use('/', userRoute);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
+app.use('*', (req, res, next) => {
+  req.flash('message', "Page not found");
+  res.redirect('/');
 });
 
 // error handler
@@ -57,6 +66,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
+  console.log(err)
   res.render('error', { title: "Error", verified: false, msg: 'Something went wrong' });
 });
 
