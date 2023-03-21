@@ -1,71 +1,66 @@
 <!-- @format -->
 <%- include('includes/head.ejs') %>
 
-<!-- @format -->
-<link rel="stylesheet" href="/stylesheets/nav.css" />
-<link rel="stylesheet" href="/stylesheets/signup.css" />
+  <!-- @format -->
+  <link rel="stylesheet" href="/stylesheets/nav.css" />
+  <link rel="stylesheet" href="/stylesheets/signup.css" />
+  <style>
+    .msg {
+      background-color: rgb(214, 57, 29);
+      width: 20%;
+      height: 10%;
+      margin-top: 4%;
+    }
+  </style>
+  <nav class="navbar">
+    <!-- LOGO -->
 
-<nav class="navbar">
-  <!-- LOGO -->
+    <div class="logo">Tasklify</div>
 
-  <div class="logo">Tasklify</div>
+    <!-- NAVIGATION MENU -->
 
-  <!-- NAVIGATION MENU -->
+    <ul class="nav-links">
+      <div class="menu">
+        <li><a href="/">Home</a></li>
 
-  <ul class="nav-links">
-    <div class="menu">
-      <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
 
-      <li><a href="/about">About</a></li>
+        <li class="services">
+          <a href="/">Services</a>
 
-      <li class="services">
-        <a href="/">Services</a>
+          <!-- DROPDOWN MENU -->
 
-        <!-- DROPDOWN MENU -->
+          <ul class="dropdown">
+            <li><a href="/progress">Progress</a></li>
 
-        <ul class="dropdown">
-          <li><a href="/progress">Progress</a></li>
+            <li><a href="/tasks?deleted=true">Deleted Tasks</a></li>
+          </ul>
+        </li>
 
-          <li><a href="/tasks?deleted=true">Deleted Tasks</a></li>
-        </ul>
-      </li>
-      <% if(!isAuth) {%>
+        <li><a href="/signup">Sign Up</a></li>
 
-      <li><a href="/signup">Sign Up</a></li>
+        <li><a href="/signin">Sign In</a></li>
 
-      <li><a href="/signin">Sign In</a></li>
+      </div>
+    </ul>
+  </nav>
+  <%- include('includes/flash.ejs') %>
+    <form action="/signup" method="POST">
+      <h2>Sign Up</h2>
+      <div class="input-field">
+        <input type="text" name="name" id="name" placeholder="Enter Username" required />
+      </div>
+      <div class="input-field">
+        <input type="email" name="email" id="email" placeholder="Enter Email" required />
+      </div>
+      <div class="input-field">
+        <input type="password" name="password" id="password" placeholder="Enter Password" required />
+      </div>
+      <button style="padding-left: 2%" class="btn">Sign Up</button>
+    </form>
+    <% if(message) { %>
+      <div class="msg">
+        <%= message %>
+      </div>
       <% } %>
-    </div>
-  </ul>
-</nav>
-<%- include('includes/flash.ejs') %>  
-<form action="/signup" method="POST">
-  <h2>Sign Up</h2>
-  <div class="input-field">
-    <input
-      type="text"
-      name="name"
-      id="name"
-      placeholder="Enter Username"
-      required />
-  </div>
-  <div class="input-field">
-    <input
-      type="email"
-      name="email"
-      id="email"
-      placeholder="Enter Email"
-      required />
-  </div>
-  <div class="input-field">
-    <input
-      type="password"
-      name="password"
-      id="password"
-      placeholder="Enter Password"
-      required />
-  </div>
-  <button style="padding-left: 2%" class="btn">Sign Up</button>
-</form>
-<div class="msg"></div>
-<%- include('includes/end.ejs') %>
+        <%- include('includes/end.ejs') %>

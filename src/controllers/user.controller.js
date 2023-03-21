@@ -1,23 +1,28 @@
 const User = require('../models/user.model');
-
-
+const Task = require('../models/task.model');
+const ObjectId = require('mongodb').ObjectId()
 exports.signup = async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
         const isValidEmail = await User.findOne({ email: email });
         if (isValidEmail) {
-            return res.status(400).render('error', { title: 'Error', verified: false, msg: "Email already exist" });
+            req.flash('msg', 'Email already exist');
+            return res.status(400).redirect('/signup');
         }
         const user = await User.create({
             name, email, password
         });
         const result = await user.save();
-        console.log(result);
-        req.session.user = user._id;
-        return res.status(201).render('index', { title: 'Home', verified: true })
-
-    } catch (error) {
-        return next(error);
+        req.session.user = user;
+        return res
+            .status(201)
+            .render('index',
+                {
+                    title: 'Home', tasks: [], message: ''
+                }
+            )
+    } catch (err) {
+        return next(err);
     }
 }
 
@@ -27,11 +32,12 @@ exports.signin = async (req, res, next) => {
         const { email, password } = req.body;
         const isValidEmail = await User.findOne({ email: email });
         if (!isValidEmail || password != isValidEmail.password) {
-            return res.status(400).render('error', { title: 'Error', verified: true, msg: "Email or Password incorrect" });
+            req.flash('msg', 'Email or Password incorrect')
+            return res.status(400).redirect('/signin');
         }
-        req.session.user = isValidEmail._id;
-        return res.status(201).render('index', { title: 'Home', verified: true })
-
+        req.session.user = isValidEmail;
+        const tasks = await Task.find({ userId: isValidEmail._id });
+        return res.status(201).render('index', { title: 'Home', tasks: tasks, message: '' })
     } catch (error) {
         return next(error);
     }

@@ -28,6 +28,7 @@ exports.add = async (req, res, next) => {
             })
             await newTask.save();
         }
+        req.flash('msg', 'Task has been Added');
         return res.redirect('/');
     } catch (error) {
         next(error)
@@ -35,9 +36,12 @@ exports.add = async (req, res, next) => {
 }
 exports.delete = async (req, res, next) => {
     try {
-        console.log(req.body);
+
         if (!req.session.user) {
             req.session.task = req.session.task.filter(e => e._id != req.params.id);
+            return res.redirect('/');
+        } else {
+            await Task.deleteOne({ _id: req.params.id });
             return res.redirect('/');
         }
     } catch (error) {
@@ -56,6 +60,8 @@ exports.update = async (req, res, next) => {
             };
             req.session.task = arr;
             return res.redirect('/');
+        }else {
+         
         }
 
 

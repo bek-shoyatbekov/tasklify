@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const path = require('path');
 const logger = require('morgan');
 
+
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 
@@ -43,11 +44,23 @@ const userRoute = require('./routes/users');
 const taskRoute = require('./routes/task');
 
 app.use((req, res, next) => {
-  if (!req.session.task) {
+  if (!req.session.user) {
     req.session.task = [];
   }
-  next()
+  let isSession = req.session.user || '';
+  User.findById(isSession._id)
+    .then((user) => {
+      req.session.user = user;
+      next()
+    }).catch((err) => {
+      next(err);
+    });
 });
+app.use((req, res, next) => {
+  console.log(req.session.user);
+  next();
+})
+
 
 app.use('/', taskRoute);
 app.use('/', userRoute);
@@ -57,6 +70,7 @@ app.use('*', (req, res, next) => {
   req.flash('message', "Page not found");
   res.redirect('/');
 });
+
 
 // error handler
 app.use(function (err, req, res, next) {
