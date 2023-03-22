@@ -7,19 +7,24 @@ const flash = require('connect-flash');
 exports.getTask = async (req, res, next) => {
     let tasks;
     if (!req.session.user) {
-        tasks = req.session.task;
+        tasks = req.session.tasks;
     } else {
-        tasks = await Task.findOne({ userId: req.session.user._id });
+        tasks = await Task.find({ userId: req.session.user._id });
     }
-    res.render('index', { _id: uuid.v4(), title: 'Tasklify', tasks: tasks, message: false });
+    res.render('index', { title: 'Tasklify', tasks: tasks, message: false, isAuth: res.locals.isAuth || false });
 }
 
 exports.add = async (req, res, next) => {
     try {
         const { title, status } = req.body;
-        const task = { _id: Math.round(Math.random() * 1000), title: title, status: status };
-        if (!req.session.user) {
-            req.session.task.push(task);
+        let task = { _id: Math.round(Math.random() * 1000), title: title, status: status };
+        if (typeof req.session.user == 'undefined') {
+
+            req.session.tasks.push(task);
+            let id = req.session.tasks._id;
+            console.log('---------Id-------');
+            console.log(id);
+            console.log('---------Id-------');
         } else {
             const newTask = await Task.create({
                 userId: req.session.user._id,
@@ -30,8 +35,8 @@ exports.add = async (req, res, next) => {
         }
         req.flash('msg', 'Task has been Added');
         return res.redirect('/');
-    } catch (error) {
-        next(error)
+    } catch (err) {
+        next(err)
     }
 }
 exports.delete = async (req, res, next) => {
@@ -60,8 +65,8 @@ exports.update = async (req, res, next) => {
             };
             req.session.task = arr;
             return res.redirect('/');
-        }else {
-         
+        } else {
+
         }
 
 

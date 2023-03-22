@@ -44,22 +44,29 @@ const userRoute = require('./routes/users');
 const taskRoute = require('./routes/task');
 
 app.use((req, res, next) => {
-  if (!req.session.user) {
-    req.session.task = [];
+  if (typeof req.session.user == 'undefined' || typeof req.session.tasks == 'undefined') {
+    req.session.tasks = [];
+    res.locals.isAuth = false;
+    console.log('--------------Task-------------');
+    console.log(req.session.tasks);
+    console.log('--------------Task-------------');
+  } else {
+
+    User.findById(req.session.user._id)
+      .then((user) => {
+        req.session.user = user;
+        console.log('------User-----');
+        console.log(user);
+        console.log('------User-----');
+        res.locals.isAuth = true;
+      }).catch((err) => {
+        next(err);
+      });
   }
-  let isSession = req.session.user || '';
-  User.findById(isSession._id)
-    .then((user) => {
-      req.session.user = user;
-      next()
-    }).catch((err) => {
-      next(err);
-    });
-});
-app.use((req, res, next) => {
-  console.log(req.session.user);
   next();
-})
+
+
+});
 
 
 app.use('/', taskRoute);
@@ -81,7 +88,7 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   console.log(err)
-  res.render('error', { title: "Error", verified: false, msg: 'Something went wrong' });
+  res.render('error', { title: "Error", verified: false, msg: 'Something went wrong', isAuth: true });
 });
 
 

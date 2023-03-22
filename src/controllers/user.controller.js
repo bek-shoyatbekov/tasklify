@@ -13,12 +13,12 @@ exports.signup = async (req, res, next) => {
             name, email, password
         });
         const result = await user.save();
-        req.session.user = user;
+        req.session.user = result;
         return res
             .status(201)
             .render('index',
                 {
-                    title: 'Home', tasks: [], message: ''
+                    title: 'Home', tasks: [], message: '', isAuth: res.locals.isAuth || false
                 }
             )
     } catch (err) {
@@ -31,13 +31,14 @@ exports.signin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const isValidEmail = await User.findOne({ email: email });
+        console.log(isValidEmail)
         if (!isValidEmail || password != isValidEmail.password) {
             req.flash('msg', 'Email or Password incorrect')
             return res.status(400).redirect('/signin');
         }
         req.session.user = isValidEmail;
         const tasks = await Task.find({ userId: isValidEmail._id });
-        return res.status(201).render('index', { title: 'Home', tasks: tasks, message: '' })
+        return res.status(201).render('index', { title: 'Home', tasks: tasks, message: '', isAuth: res.locals.isAuth || false })
     } catch (error) {
         return next(error);
     }
